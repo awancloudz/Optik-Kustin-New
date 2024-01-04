@@ -1,0 +1,1 @@
+Appsheet -> JSON Data -> API (Post) -> Generate PDF -> Send Whatsapp -> Save to MongoDb
