@@ -16,11 +16,14 @@ export async function GET(){
 export async function POST(request){
     //Capture Data from AppSheet
     const{Data} = await request.json();
-    const NoNota = Data.NoNota;
-    const Tanggal = Data.Tanggal;
-    const Keterangan = Data.Keterangan;
-    const NamaCustomer = Data.NamaCustomer;
-    const NoHandphone = Data.NoHandphone;
+    console.log(Data["NAMA CUSTOMER"]);
+    const NoNota = Data.NOTA;
+    const Tanggal = Data.TANGGAL;
+    const RX = Data.RX;
+    const IDCustomer = Data["ID MEMBER"];
+    const NamaCustomer = Data["NAMA CUSTOMER"];
+    const NoHandphone = Data["NO. TELP"];
+    const Alamat = Data.ALAMAT;
 
     // Generate PDF using puppeteer
     const browser = await puppeteer.launch();
@@ -29,11 +32,18 @@ export async function POST(request){
     `<html><body>   
     <p align='center'> <b>OPTIK KUSTIN</b><br>Jl. Sirojudin Raya No.37<br>Undip Tembalang - Kota Semarang<br>Telp. 024-76402637 - WA 0813 7757 2015</p>
     <hr>
-    <p><b>No.Nota :</b> ${NoNota}</p>
-    <p><b>Tanggal :</b> ${Tanggal}</p>
-    <p><b>Keterangan :</b> ${Keterangan}</p>
+    <p><b>No :</b> ${NoNota}</p>
+    <p><b>Rx :</b> ${RX}</p>
+    <p><b>Tanggal Pembelian:</b> ${Tanggal}</p><hr>
+    <p><b>No.ID Cust :</b> ${IDCustomer}</p>
     <p><b>Nama :</b> ${NamaCustomer}</p>
-    <p><b>No.Handphone :</b> ${NoHandphone}</p>
+    <p><b>Alamat :</b> ${Alamat}</p>
+    <p><b>Telp :</b> ${NoHandphone}</p><hr>
+    <table>
+    <tr>
+    <th>Keterangan</th><th>Harga</th><th>Diskon</th>
+    </tr>
+    <table>
     </body></html>`;
     await page.setContent(htmlContent);
     const pdfBuffer = await page.pdf({ format: 'A6', printBackground: true });
@@ -47,7 +57,7 @@ export async function POST(request){
 
     //Save Data to MongoDB
     await connectMongoDB();
-    await Transaction.create([{NoNota, Tanggal, Keterangan, NamaCustomer, NoHandphone, FilePDF}]);
+    await Transaction.create([{NoNota, Tanggal, RX, IDCustomer, NamaCustomer, Alamat, NoHandphone, FilePDF}]);
     mongoose.connection.close()
 
     //Send PDF to Whatsapp
@@ -56,7 +66,7 @@ export async function POST(request){
         headers: {
             "Content-type": "application/json",
         },
-        body: JSON.stringify({NoNota, Tanggal, Keterangan, NamaCustomer, NoHandphone, FilePDF}),
+        body: JSON.stringify({NoNota, Tanggal, RX, IDCustomer, NamaCustomer, Alamat, NoHandphone, FilePDF}),
     });
 
     //Respon
