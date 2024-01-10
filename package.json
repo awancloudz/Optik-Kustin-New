@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "bwip-js": "^4.2.0",
     "html-pdf": "^3.0.1",
     "mongoose": "^8.0.3",
     "next": "14.0.4",
