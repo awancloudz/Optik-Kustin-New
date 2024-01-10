@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import connectMongoDB from "@/libs/mongodb";
-import Transaction from "@/models/transaction";
+import Pemesanan from "@/models/pemesanan";
 
 export async function GET(request, {params}){
     const { id } = params;
     await connectMongoDB();
-    const transaction = await Transaction.findOne({NoNota: id});
+    const pemesanan = await Pemesanan.findOne({NoNota: id});
 
-    return NextResponse.json({transaction}, {status: 200});
+    return NextResponse.json({pemesanan}, {status: 200});
 }

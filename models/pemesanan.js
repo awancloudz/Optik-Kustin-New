@@ -1,9 +1,10 @@
 import mongoose, {Schema} from "mongoose";
 
-const transactionSchema = new Schema(
+const pemesananSchema = new Schema(
     {
         JenisTransaksi: String,
         Cabang: String,
+        RX: String,
         NoNota: String,
         Keterangan: String,
         Tanggal: Date,
@@ -17,6 +18,6 @@ const transactionSchema = new Schema(
     }
 );
 
-const Transaction = mongoose.models.Transaction || mongoose.model("Transaction", transactionSchema);
+const Pemesanan = mongoose.models.Pemesanan || mongoose.model("Pemesanan", pemesananSchema);
 
-export default Transaction;
+export default Pemesanan;

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import connectMongoDB from "@/libs/mongodb";
-import Transaction from "@/models/transaction";
+import Pemesanan from "@/models/pemesanan";
 import puppeteer from 'puppeteer';
 import fs from 'fs';
 import path from 'path';
@@ -10,8 +10,8 @@ import bwipjs from "bwip-js";
 
 export async function GET(){
     await connectMongoDB();
-    const transaction = await Transaction.find();
-    return NextResponse.json({transaction},{status:201});
+    const pemesanan = await Pemesanan.find();
+    return NextResponse.json({pemesanan},{status:201});
 }
 
 export async function POST(request){
@@ -209,47 +209,27 @@ export async function POST(request){
     // Save the PDF to a file
     const pdfPath = path.join(process.cwd(), 'public/pdf/', 'nota_'+`${NoNota}`+'.pdf');
     const pdfPath2 = path.join(process.cwd(), 'public/pdf/', 'garansi_'+`${NoNota}`+'.pdf');
-    if(JenisTransaksi == "PESAN KACAMATA"){
-        fs.writeFileSync(pdfPath, pdfBuffer);
-        fs.writeFileSync(pdfPath2, pdfBuffer2);
-        var FilePDF = 'nota_'+`${NoNota}`+'.pdf';
-        Data.FilePDF = FilePDF;
-        var FilePDF2 = 'garansi_'+`${NoNota}`+'.pdf';
-        Data.FilePDF2 = FilePDF2;
 
-        //Save Data to MongoDB
-        await connectMongoDB();
-        await Transaction.create([{JenisTransaksi, Cabang, NoNota, Tanggal, RX, IDCustomer, NamaCustomer, Alamat, NoHandphone, FilePDF, FilePDF2}]);
-        mongoose.connection.close()
+    fs.writeFileSync(pdfPath, pdfBuffer);
+    fs.writeFileSync(pdfPath2, pdfBuffer2);
+    var FilePDF = 'nota_'+`${NoNota}`+'.pdf';
+    Data.FilePDF = FilePDF;
+    var FilePDF2 = 'garansi_'+`${NoNota}`+'.pdf';
+    Data.FilePDF2 = FilePDF2;
 
-        //Send PDF to Whatsapp
-        await fetch("http://localhost:8000/transaction",{
-            method: "POST",
-            headers: {
-                "Content-type": "application/json",
-            },
-            body: JSON.stringify({JenisTransaksi, Cabang, NoNota, Tanggal, RX, IDCustomer, NamaCustomer, Alamat, NoHandphone, FilePDF, FilePDF2}),
-        });
-    }
-    else if(JenisTransaksi == "JUAL LANGSUNG"){
-        fs.writeFileSync(pdfPath, pdfBuffer);
-        var FilePDF = 'nota_'+`${NoNota}`+'.pdf';
-        Data.FilePDF = FilePDF;
+    //Save Data to MongoDB
+    await connectMongoDB();
+    await Pemesanan.create([{JenisTransaksi, Cabang, NoNota, Tanggal, RX, IDCustomer, NamaCustomer, Alamat, NoHandphone, FilePDF, FilePDF2}]);
+    mongoose.connection.close()
 
-        //Save Data to MongoDB
-        await connectMongoDB();
-        await Transaction.create([{JenisTransaksi, Cabang, NoNota, Tanggal, RX, IDCustomer, NamaCustomer, Alamat, NoHandphone, FilePDF}]);
-        mongoose.connection.close()
-
-        //Send PDF to Whatsapp
-        await fetch("http://localhost:8000/transaction",{
-            method: "POST",
-            headers: {
-                "Content-type": "application/json",
-            },
-            body: JSON.stringify({JenisTransaksi, Cabang, NoNota, Tanggal, RX, IDCustomer, NamaCustomer, Alamat, NoHandphone, FilePDF}),
-        });
-    }
+    //Send PDF to Whatsapp
+    await fetch("http://localhost:8000/transaction",{
+        method: "POST",
+        headers: {
+            "Content-type": "application/json",
+        },
+        body: JSON.stringify({JenisTransaksi, Cabang, NoNota, Tanggal, RX, IDCustomer, NamaCustomer, Alamat, NoHandphone, FilePDF, FilePDF2}),
+    });
 
     //Response
     return NextResponse.json({message: "Nota Terkirim",Data},{status:201});    
