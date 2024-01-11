@@ -11,7 +11,8 @@ const pemesananSchema = new Schema(
         NamaCustomer: String,
         NoHandphone: String,
         FilePDF: String,
-        FilePDF2: String
+        FilePDF2: String,
+        FilePDF3: String
     },
     {
         timestamps: true,

@@ -46,13 +46,32 @@ export async function POST(request){
 
     //Data Utama
     const NoNota = Data.NOTA;
-    const Tanggal = Data.TANGGAL;
+    const TanggalPesan = Data["TGL PESAN"];
+    const TanggalSelesai = Data["TGL SELESAI"];
     const RX = Data.RX;
     const IDCustomer = Data["ID MEMBER"];
+    if(IDCustomer != ""){
+        var customer = `<tr><td><b>No.ID Cust</b></td><td>: ${IDCustomer}</td><tr></tr>`;
+    }
+    else{
+        var customer = ``;
+    }
     const NamaCustomer = Data["NAMA CUSTOMER"];
     const NoHandphone = Data["NO. TELP"];
     const Alamat = Data.ALAMAT;    
+    const TanggalLahir = Data["TANGGAL LAHIR"];
+    const JenisKelamin = Data["JENIS KELAMIN"];
 
+    // Hitung umur
+    var tanggalLahirObj = new Date(TanggalLahir);
+    var sekarang = new Date();
+    var selisih = sekarang - tanggalLahirObj;
+    // Konversi selisih waktu ke tahun, bulan, dan hari
+    var tahun = Math.floor(selisih / (365.25 * 24 * 60 * 60 * 1000));
+    var bulan = Math.floor((selisih % (365.25 * 24 * 60 * 60 * 1000)) / (30.44 * 24 * 60 * 60 * 1000));
+    var hari = Math.floor((selisih % (30.44 * 24 * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000));
+    var Umur = tahun + " Tahun " + bulan + " Bulan " + hari + " Hari";
+    
     //Fungsi Convert Rupiah to Number
     const rupiahToNumber = (rupiahString) => {
         // Hapus karakter non-numeric dari string
@@ -62,14 +81,10 @@ export async function POST(request){
         return isNaN(numericValue) ? 0 : numericValue;
     }
 
-    var Diskon1 = (rupiahToNumber(Data["HARGA 1"]) * (rupiahToNumber(Data["DISKON 1"]) / 100)) * Data["QTY 1"];
-    var Diskon2 = (rupiahToNumber(Data["HARGA 2"]) * (rupiahToNumber(Data["DISKON 2"]) / 100)) * Data["QTY 2"];
-    var Diskon3 = (rupiahToNumber(Data["HARGA 3"]) * (rupiahToNumber(Data["DISKON 3"]) / 100)) * Data["QTY 3"];
-    var Diskon4 = (rupiahToNumber(Data["HARGA 4"]) * (rupiahToNumber(Data["DISKON 4"]) / 100)) * Data["QTY 4"];
-    var Jumlah1 = (rupiahToNumber(Data["HARGA 1"]) * Data["QTY 1"]) - Diskon1;
-    var Jumlah2 = (rupiahToNumber(Data["HARGA 2"]) * Data["QTY 2"]) - Diskon2;
-    var Jumlah3 = (rupiahToNumber(Data["HARGA 3"]) * Data["QTY 3"]) - Diskon3;
-    var Jumlah4 = (rupiahToNumber(Data["HARGA 4"]) * Data["QTY 4"]) - Diskon4;
+    var Diskon1 = rupiahToNumber(Data["HARGA FRAME"]) * (rupiahToNumber(Data["DISKON FRAME"]) / 100);
+    var Diskon2 = rupiahToNumber(Data["HARGA LENSA"]) * (rupiahToNumber(Data["DISKON LENSA"]) / 100);
+    var Jumlah1 = rupiahToNumber(Data["HARGA FRAME"]) - Diskon1;
+    var Jumlah2 = rupiahToNumber(Data["HARGA LENSA"]) - Diskon2;
 
     //Fungsi Convert Number to Rupiah
     const numberToRupiah = (number) => {
@@ -82,44 +97,22 @@ export async function POST(request){
     }
     
     //Deteksi Produk
-    if(Data["NAMA 1"] != ""){
-        var produk1 = `<tr><td>${Data["QTY 1"]}</td><td>${Data["NAMA 1"]}</td><td>${Data["HARGA 1"]}</td><td>${Data["DISKON 1"]}</td><td align='right'>${numberToRupiah(Jumlah1)}</td></tr>`;
+    if(Data["SKU FRAME"] != ""){
+        var produk1 = `<tr><td>${Data.FRAME}</td><td align='right'>${Data["HARGA FRAME"]}</td><td align='center'>${Data["DISKON FRAME"]}</td><td align='right'>${numberToRupiah(Jumlah1)}</td></tr>`;
     }
     else{
         var produk1 = ``;
     }
-    if(Data["NAMA 2"] != ""){
-        var produk2 = `<tr><td>${Data["QTY 2"]}</td><td>${Data["NAMA 2"]}</td><td>${Data["HARGA 2"]}</td><td>${Data["DISKON 2"]}</td><td align='right'>${numberToRupiah(Jumlah2)}</td></tr>`;
+    if(Data["SKU LENSA"] != ""){
+        var produk2 = `<tr><td>${Data.LENSA}</td><td align='right'>${Data["HARGA LENSA"]}</td><td align='center'>${Data["DISKON LENSA"]}</td><td align='right'>${numberToRupiah(Jumlah2)}</td></tr>`;
     }
     else{
         var produk2 = ``;
     }
-    if(Data["NAMA 3"] != ""){
-        var produk3 = `<tr><td>${Data["QTY 3"]}</td><td>${Data["NAMA 3"]}</td><td>${Data["HARGA 3"]}</td><td>${Data["DISKON 3"]}</td><td align='right'>${numberToRupiah(Jumlah3)}</td></tr>`;
-    }
-    else{
-        var produk3 = ``;
-    }
-    if(Data["NAMA 4"] != ""){
-        var produk2 = `<tr><td>${Data["QTY 2"]}</td><td>${Data["NAMA 2"]}</td><td>${Data["HARGA 2"]}</td><td>${Data["DISKON 2"]}</td><td align='right'>${numberToRupiah(Jumlah4)}</td></tr>`;
-    }
-    else{
-        var produk4 = ``;
-    }
-
-    //Jenis Pembayaran
-    if(Data["JENIS PEMBAYARAN"] == 'TUNAI'){
-        var Tunai = Data.PEMBAYARAN;
-        var NonTunai = '-';
-    }
-    else{
-        var Tunai = '-';
-        var NonTunai = Data.PEMBAYARAN;
-    }
 
     //Barcode Generator
     bwipjs.toBuffer({
-        bcid: 'code128',       // Barcode type
+        bcid: 'code39',       // Barcode type
         text: NoNota,            // Text to encode
         scale: 3,               // 3x scaling factor
         height: 10,              // Bar height, in millimeters
@@ -146,36 +139,39 @@ export async function POST(request){
     <head>
     </head>
     <body style='font-family: Arial, Helvetica, sans-serif;'> 
-    <p align='center'><img src='${FilePNG}'/><br>
-    <b>OPTIK KUSTIN</b><br>${AlamatCabang}</p>
+    <p align='center'><img src='${FilePNG}'/></p>
+    <p align='center'><b>OPTIK KUSTIN</b><br>${AlamatCabang}</p>
     <hr style='border-top: 1px dotted black;'> 
-    <table width='100%' >
-    <tr><td width='25%'><b>No</b></td><td width='50%'>: ${NoNota}</td><tr>
-    <tr><td><b>Rx</b></td><td>: ${RX}</td><tr>
-    <tr><td><b>Tanggal Pembelian</b></td><td>: ${Tanggal}</td><tr>
-    <tr><td colspan='2'><hr style='border-top: 1px dotted black;'></td></tr>
-    <tr><td><b>No.ID Cust</b></td><td>: ${IDCustomer}</td><tr>
-    <tr><td><b>Nama</b></td><td>: ${NamaCustomer}</td><tr>
-    <tr><td><b>Alamat</b></td><td>: ${Alamat}</td><tr>
-    <tr><td><b>Telp</b></td><td>: ${NoHandphone}</td><tr>
+    <table width='100%'>
+    <tr><td width='25%'><b>No</b></td><td colspan='2'>: ${NoNota}</td><tr>
+    <tr><td><b>Rx</b></td><td colspan='2'>: ${RX}</td><tr>
+    <tr><td><b>Tgl. Pembelian</b></td><td colspan='2'>: ${TanggalPesan}</td><tr>
+    <tr><td><b>Tgl. Selesai</b></td><td colspan='2'>: ${TanggalSelesai}</td><tr>
+    <tr><td colspan='3'><hr style='border-top: 1px dotted black;'></td></tr>
+    ${customer}
+    <tr><td><b>Nama</b></td><td colspan='2'>: ${NamaCustomer}</td><tr>
+    <tr><td style='vertical-align: top;'><b>Alamat</b></td><td align='left' style='vertical-align: top;'>: </td><td style='word-wrap: break-word;width: 500px;'>${Alamat}</td><tr>
+    <tr><td><b>Telp</b></td><td colspan='2'>: ${NoHandphone}</td><tr>
+    <tr><td><b>Umur</b></td><td colspan='2'>: ${Umur}</td><tr>
+    <tr><td><b>Jenis Kelamin</b></td><td colspan='2'>: ${JenisKelamin}</td><tr>
     </table>
     <table width='100%' align='center'>
-    <tr><td colspan='5'><hr style='border-top: 1px solid black;border-bottom: 1px solid black;height:1px;'></td></tr>
-    <tr><th>Jm</th><th>Nama Barang</th><th>Harga</th><th>Diskon</th><th>Jumlah</th></tr>
-    <tr><td colspan='5'><hr style='border-top: 1px solid black;border-bottom: 1px solid black;height:1px;'></td></tr>
+    <tr><td colspan='4'><hr style='border-top: 1px solid black;border-bottom: 1px solid black;height:1px;'></td></tr>
+    <tr><th>Keterangan</th><th>Harga</th><th>Diskon</th><th>Jumlah</th></tr>
+    <tr><td colspan='4'><hr style='border-top: 1px solid black;border-bottom: 1px solid black;height:1px;'></td></tr>
     ${produk1}
     ${produk2}
-    ${produk3}
-    ${produk4}
-    <tr><td colspan='5'><hr style='border-top: 1px dotted black;'></td></tr>
-    <tr><td colspan='2'></td><td colspan='2'>SUB TOTAL</td><td align='right'>${Data.SUBTOTAL}</td></tr>
-    <tr><td colspan='2'></td><td colspan='2'>DISKON</td><td align='right'>${Data.DISKON}</td></tr>
-    <tr><td colspan='2'></td><td colspan='3'><hr style='border-top: 1px dotted black;'></td></tr>
-    <tr><td colspan='2'></td><td colspan='2'>TOTAL</td><td align='right'>${Data.TOTAL}<br></td></tr>
-    <tr><td colspan='2'></td><td colspan='2'>NON TUNAI</td><td align='right'>${NonTunai}</td></tr>
-    <tr><td colspan='2'></td><td colspan='2'>TUNAI</td><td align='right'>${Tunai}</td></tr>
-    <tr><td colspan='2'></td><td colspan='2'>Anda Hemat</td><td align='right'>-</td></tr>
-    <table><hr style='border-top: 1px dotted black;'>
+    <tr><td colspan='4'><hr style='border-top: 1px dotted black;'></td></tr>
+    <tr><td></td><td colspan='2'>SUB TOTAL</td><td align='right'>${Data.SUBTOTAL}</td></tr>
+    <tr><td></td><td colspan='2'>DISKON</td><td align='right'>${Data.DISKON}</td></tr>
+    <tr><td></td><td colspan='2'>BIAYA TAMBAHAN</td><td align='right'>${Data["DISKON TAMBAHAN"]}</td></tr>
+    <tr><td></td><td colspan='3'><hr style='border-top: 1px dotted black;'></td></tr>
+    <tr><td></td><td colspan='2'>TOTAL</td><td align='right'>${Data.TOTAL}<br></td></tr>
+    <tr><td></td><td colspan='2'>UANG MUKA</td><td align='right'>${Data.UANGMUKA}<br></td></tr>
+    <tr><td></td><td colspan='2'>PEMBAYARAN</td><td align='right'>${Data["JENIS PEMBAYARAN"]}</td></tr>
+    <tr><td></td><td colspan='2'>SISA</td><td align='right'>${Data.SISA}</td></tr>
+    <tr><td></td><td colspan='2'>Anda Hemat</td><td align='right'>${Data.DISKON}</td></tr>
+    </table><hr style='border-top: 1px solid black;border-bottom: 1px solid black;height:1px;'>
     <p align='center'><b>TERIMA KASIH</b></p>
     <p>* Barang yang sudah dibeli tidak dapat ditukar/dikembalikan, uang muka tidak dapat di kembalikan.<br>
     * Barang yang tidak diambil setelah 3 bulan diluar tanggung jawab kami.<br>
@@ -183,43 +179,126 @@ export async function POST(request){
     </p>
     </body></html>`;   
     await page.setContent(htmlContent);
-    const pdfBuffer = await page.pdf({ format: 'A4', printBackground: true });
+    const pdfBuffer = await page.pdf({ 
+        format: 'A5', 
+        margin: { top: 10, bottom: 0, right: 5, left: 5 },
+        printBackground: true
+    });
     await browser.close();
 
     // Generate PDF Kartu Garansi
     const browser2 = await puppeteer.launch();
     const page2 = await browser2.newPage();
     const htmlContent2 = 
+    `<html style='background: white;'>
+    <head>
+    </head>
+    <body style='font-family: Arial, Helvetica, sans-serif;'>     
+    <table width='100%' style='background-color:#ededed;border-radius: 20px;padding-left:10px;padding-right:10px;padding-bottom:10px;'>
+    <tr><td><h4><br>GUARANTEE CARD</h4></td><td colspan='2' style='vertical-align: middle;text-align:center;'><img width='40%' src='http://localhost:3000/png/watermark.png'/></td></tr>
+    ${customer}
+    <tr><td width='35%'><b>Nama</b></td><td colspan='2'>: ${NamaCustomer}</td><tr>
+    <tr><td style='vertical-align: top;'><b>Alamat</b></td><td align='left' style='vertical-align: top;'>: </td><td style='word-wrap: break-word;width: 500px;'>${Alamat}</td><tr>
+    <tr><td><b>Telp</b></td><td colspan='2'>: ${NoHandphone}</td><tr>
+    <tr><td><b>No / Date</b></td><td colspan='2' style='vertical-align: top;'>: ${NoNota} / ${TanggalSelesai} <img width='25%' src='${FilePNG}' align='center'/></td><tr>
+    <tr><td><b>R/ OD</b></td><td colspan='2'>: ${Data["SPH RIGHT"]} ${Data["CYL RIGHT"]} ${Data["AXIS RIGHT"]}</td><tr>
+    <tr><td><b>L/ OD</b></td><td colspan='2'>:  ${Data["SPH LEFT"]} ${Data["CYL LEFT"]} ${Data["AXIS LEFT"]}</td><tr>
+    <tr><td><b>ADD</b></td><td colspan='2'>: ${Data.ADD}</td><tr>
+    <tr><td><b>PD</b></td><td colspan='2'>: ${Data.PD}</td><tr>
+    <tr><td><b>Lens</b></td><td colspan='2'>: ${Data.LENSA}</td><tr>
+    <tr><td><b>Frame</b></td><td colspan='2'>: ${Data.FRAME}</td><tr>
+    <tr><td colspan='3' align='center' style='font-size:11;'><br>* Kartu GARANSI memberikan __ bulan pelayanan gratis untuk pengelupasan lapisan anti refleksi (peeling) yang disebabkan kesalahan produksi. * Garansi tidak termasuk kerusakan akibat terkena bahan kimia, goresan benda keras, benturan dan suhu panas. * Proses klaim harus menunjukan kartu ini.</td></tr>
+    </table>
+    </body></html>`;   
+    await page2.setContent(htmlContent2);
+    const pdfBuffer2 = await page2.pdf({ 
+        format: 'A5', 
+        margin: { top: 10, bottom: 0, right: 10, left: 10 },
+        printBackground: true 
+    });
+    await browser2.close();
+
+    // Generate PDF Nota Transaksi
+    const browser3 = await puppeteer.launch();
+    const page3 = await browser3.newPage();
+    const htmlContent3 = 
     `<html>
     <head>
     </head>
     <body style='font-family: Arial, Helvetica, sans-serif;'> 
-    <h3>GUARANTEE CARD</h3>
+    <p align='center'><img src='${FilePNG}'/></p>
+    <p align='center'><b>OPTIK KUSTIN</b><br>${AlamatCabang}</p>
+    <hr style='border-top: 1px dotted black;'> 
     <table width='100%'>
-    <tr><td width='25%'><b>No.ID Cust</b></td><td width='50%'>: ${IDCustomer}</td><tr>
-    <tr><td><b>Nama</b></td><td>: ${NamaCustomer}</td><tr>
-    <tr><td><b>Alamat</b></td><td>: ${Alamat}</td><tr>
-    <tr><td><b>Telp</b></td><td>: ${NoHandphone}</td><tr>
+    <tr><td width='25%'><b>No</b></td><td colspan='2'>: ${NoNota}</td><tr>
+    <tr><td><b>Rx</b></td><td colspan='2'>: ${RX}</td><tr>
+    <tr><td><b>Tgl. Pembelian</b></td><td colspan='2'>: ${TanggalPesan}</td><tr>
+    <tr><td><b>Tgl. Selesai</b></td><td colspan='2'>: ${TanggalSelesai}</td><tr>
+    <tr><td colspan='3'><hr style='border-top: 1px dotted black;'></td></tr>
+    ${customer}
+    <tr><td><b>Nama</b></td><td colspan='2'>: ${NamaCustomer}</td><tr>
+    <tr><td style='vertical-align: top;'><b>Alamat</b></td><td align='left' style='vertical-align: top;'>: </td><td style='word-wrap: break-word;width: 500px;'>${Alamat}</td><tr>
+    <tr><td><b>Telp</b></td><td colspan='2'>: ${NoHandphone}</td><tr>
+    <tr><td><b>Umur</b></td><td colspan='2'>: ${Umur}</td><tr>
+    <tr><td><b>Jenis Kelamin</b></td><td colspan='2'>: ${JenisKelamin}</td><tr>
     </table>
+    <table width='100%' align='center'>
+    <tr><td colspan='7'><hr style='border-top: 1px solid black;border-bottom: 1px solid black;height:1px;'></td></tr>
+    <tr><th></th><th>SPH</th><th>CYL</th><th>AXIS</th><th>ADD</th><th>PD</th><th>Vis Akhir</th></tr>
+    <tr><td colspan='7'><hr style='border-top: 1px solid black;border-bottom: 1px solid black;height:1px;'></td></tr>
+    <tr align='center'><td>R</td><td>${Data["SPH RIGHT"]}</td><td>${Data["CYL RIGHT"]}</td><td>${Data["AXIS RIGHT"]}</td><td rowspan='2'>${Data.ADD}</td><td rowspan='2'>${Data.PD}</td><td>6/6</td></tr>
+    <tr align='center'><td>L</td><td>${Data["SPH RIGHT"]}</td><td>${Data["CYL RIGHT"]}</td><td>${Data["AXIS RIGHT"]}</td><td>6/6</td></tr>
+    <tr><td colspan='7'><hr style='border-top: 1px dotted black;'></td></tr>
+    </table>
+    <table width='100%'>
+    <tr><td width='25%'>Visus Balancing</td><td colspan='2'>: ${Data["VISUS BALANCING"]}</td><tr>
+    <tr><td>Duke Elder</td><td colspan='2'>: ${Data["DUKE ELDER"]}</td><tr>
+    <tr><td>Catatan Resep</td><td colspan='2'>: ${Data["CATATAN RESEP"]}</td><tr>
+    <tr><td colspan='3'><hr style='border-top: 1px dotted black;'></td></tr>
+    <tr><td width='25%'><b>Frame</b></td><td colspan='2'>: ${Data.FRAME}</td><tr>
+    <tr><td><b>Lensa</b></td><td colspan='2'>: ${Data.LENSA}</td><tr>
+    <tr><td><b>Total</b></td><td colspan='2'>: ${Data.TOTAL}</td><tr>
+    <tr><td><b>DP</b></td><td colspan='2'>: ${Data.UANGMUKA}</td><tr>
+    <tr><td><b>Sisa</b></td><td colspan='2'>: ${Data.SISA}</td><tr>
+    </table>
+    <h2 align='center'>${Cabang}</h2>
+    <table width='100%' style='border-collapse: collapse;border: 1px solid black;'>
+    <tr><td width='50%' align='center'><br>Edger</td><td width='50%' align='center'><br>Quality Control</td></tr>
+    <tr><td align='center'><br><br><br></td><td align='center'><br><br><br></td></tr>
+    <tr><td align='center'>(...............)</td><td align='center'>(...............)</td></tr>
+    <tr><td align='center'><br><br>Yang Menyerahkan</td><td width='50%' align='center'><br><br>Penerima</td></tr>
+    <tr><td align='center'><br><br><br></td><td align='center'><br><br><br></td></tr>
+    <tr><td align='center'>(...............)<br><br></td><td align='center'>(...............)<br><br></td></tr>
+    </table>
+    <p>Keterangan :</p>
     </body></html>`;   
-    await page2.setContent(htmlContent2);
-    const pdfBuffer2 = await page2.pdf({ format: 'A5', printBackground: true });
-    await browser2.close();
+    await page3.setContent(htmlContent3);
+    const pdfBuffer3 = await page3.pdf({ 
+        format: 'A5', 
+        margin: { top: 10, bottom: 0, right: 5, left: 5 },
+        printBackground: true
+    });
+    await browser3.close();
 
     // Save the PDF to a file
-    const pdfPath = path.join(process.cwd(), 'public/pdf/', 'nota_'+`${NoNota}`+'.pdf');
-    const pdfPath2 = path.join(process.cwd(), 'public/pdf/', 'garansi_'+`${NoNota}`+'.pdf');
+    const pdfPath = path.join(process.cwd(), 'public/pdf/', 'notapemesanan_'+`${NoNota}`+'.pdf');
+    const pdfPath2 = path.join(process.cwd(), 'public/pdf/', 'kartugaransi_'+`${NoNota}`+'.pdf');
+    const pdfPath3 = path.join(process.cwd(), 'public/pdf/', 'suratorder_'+`${NoNota}`+'.pdf');
 
     fs.writeFileSync(pdfPath, pdfBuffer);
     fs.writeFileSync(pdfPath2, pdfBuffer2);
-    var FilePDF = 'nota_'+`${NoNota}`+'.pdf';
+    fs.writeFileSync(pdfPath3, pdfBuffer3);
+    var FilePDF = 'notapemesanan_'+`${NoNota}`+'.pdf';
     Data.FilePDF = FilePDF;
-    var FilePDF2 = 'garansi_'+`${NoNota}`+'.pdf';
+    var FilePDF2 = 'kartugaransi_'+`${NoNota}`+'.pdf';
     Data.FilePDF2 = FilePDF2;
+    var FilePDF3 = 'suratorder_'+`${NoNota}`+'.pdf';
+    Data.FilePDF3 = FilePDF3;
+    console.log("Generate PDF Sukses!");
 
     //Save Data to MongoDB
     await connectMongoDB();
-    await Pemesanan.create([{JenisTransaksi, Cabang, NoNota, Tanggal, RX, IDCustomer, NamaCustomer, Alamat, NoHandphone, FilePDF, FilePDF2}]);
+    await Pemesanan.create([{JenisTransaksi, Cabang, NoNota, TanggalPesan, TanggalSelesai, RX, IDCustomer, NamaCustomer, Alamat, NoHandphone, FilePDF, FilePDF2, FilePDF3}]);
     mongoose.connection.close()
 
     //Send PDF to Whatsapp
@@ -228,7 +307,7 @@ export async function POST(request){
         headers: {
             "Content-type": "application/json",
         },
-        body: JSON.stringify({JenisTransaksi, Cabang, NoNota, Tanggal, RX, IDCustomer, NamaCustomer, Alamat, NoHandphone, FilePDF, FilePDF2}),
+        body: JSON.stringify({JenisTransaksi, Cabang, NoNota, TanggalPesan, TanggalSelesai, RX, IDCustomer, NamaCustomer, Alamat, NoHandphone, FilePDF, FilePDF2, FilePDF3}),
     });
 
     //Response
