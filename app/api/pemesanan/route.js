@@ -195,7 +195,7 @@ export async function POST(request){
     </head>
     <body style='font-family: Arial, Helvetica, sans-serif;'>     
     <table width='100%' style='background-color:#ededed;border-radius: 20px;padding-left:10px;padding-right:10px;padding-bottom:10px;'>
-    <tr><td><h4><br>GUARANTEE CARD</h4></td><td colspan='2' style='vertical-align: middle;text-align:center;'><img width='40%' src='http://localhost:3000/png/watermark.png'/></td></tr>
+    <tr><td><h4><br>GUARANTEE CARD</h4></td><td colspan='2' style='vertical-align: middle;text-align:center;'><img width='40%' src='http://localhost:3000/logo/watermark.png'/></td></tr>
     ${customer}
     <tr><td width='35%'><b>Nama</b></td><td colspan='2'>: ${NamaCustomer}</td><tr>
     <tr><td style='vertical-align: top;'><b>Alamat</b></td><td align='left' style='vertical-align: top;'>: </td><td style='word-wrap: break-word;width: 500px;'>${Alamat}</td><tr>
@@ -251,10 +251,20 @@ export async function POST(request){
     <tr><td colspan='7'><hr style='border-top: 1px dotted black;'></td></tr>
     </table>
     <table width='100%'>
-    <tr><td width='25%'>Visus Balancing</td><td colspan='2'>: ${Data["VISUS BALANCING"]}</td><tr>
-    <tr><td>Duke Elder</td><td colspan='2'>: ${Data["DUKE ELDER"]}</td><tr>
-    <tr><td>Catatan Resep</td><td colspan='2'>: ${Data["CATATAN RESEP"]}</td><tr>
-    <tr><td colspan='3'><hr style='border-top: 1px dotted black;'></td></tr>
+    <tr><td width='25%'>Jenis Frame</td><td>: ${Data["JENIS FRAME"]}</td><td>Wrap Angle</td><td>: ${Data["WRAP ANGLE"]}</td><tr>
+    <tr><td>Koridor</td><td>: ${Data.CORRIDOR}</td><td>Pantoskopik</td><td>: ${Data.PANTOSCOPIK}</td><tr>
+    <tr><td>Visus Balancing</td><td>: ${Data["VISUS BALANCING"]}</td><td>Vertex Distance</td><td>: ${Data["VERTEX DISTANCE"]}</td><tr>
+    <tr><td>Duke Elder</td><td>: ${Data["DUKE ELDER"]}</td><td>Catatan Resep</td><td>: ${Data["CATATAN RESEP"]}</td><tr>
+    <tr><td colspan='4'><hr style='border-top: 1px dotted black;'></td></tr>
+    </table>    
+    <table width='100%' align='center'>
+    <tr><td colspan='5'><br><br><br><br><p><b>PRECAL:</b></p></td></tr>
+    <tr><td colspan='5'><hr style='border-top: 1px solid black;border-bottom: 1px solid black;height:1px;'></td></tr>
+    <tr><th>A</th><th>B</th><th>DBL</th><th>MPD</th><th>SH/PV</th></tr>
+    <tr><td colspan='5'><hr style='border-top: 1px solid black;border-bottom: 1px solid black;height:1px;'></td></tr>
+    <tr align='center'><td>${Data.A}</td><td>${Data.B}</td><td>${Data.DBL}</td><td>${Data.MPD}</td><td>${Data["SH/PV"]}</td></tr>
+    </table><br>
+    <table width='100%' align='center'>
     <tr><td width='25%'><b>Frame</b></td><td colspan='2'>: ${Data.FRAME}</td><tr>
     <tr><td><b>Lensa</b></td><td colspan='2'>: ${Data.LENSA}</td><tr>
     <tr><td><b>Total</b></td><td colspan='2'>: ${Data.TOTAL}</td><tr>
