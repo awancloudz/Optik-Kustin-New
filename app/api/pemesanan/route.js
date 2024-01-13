@@ -122,7 +122,7 @@ export async function POST(request){
     .then(png => {
         png.readUInt32BE(16);// PNG image width
         png.readUInt32BE(20);// PNG image height
-        const pngPath = path.join(process.cwd(), 'public/png/', 'nota'+`${NoNota}`+'.png');
+        const pngPath = path.join(process.cwd(), './public/png/', 'nota'+`${NoNota}`+'.png');
         fs.writeFileSync(pngPath, png);
     })
     .catch(err => {
