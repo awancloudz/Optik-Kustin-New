@@ -152,8 +152,8 @@ export async function POST(request){
     .catch(err => {
         // `err` may be a string or Error object
     });
-    //const FilePNG = 'http://103.31.39.135:3000/png/nota_'+`${NoNota}`+'.png';
-    const FilePNG = 'http://localhost:3000/png/nota_'+`${NoNota}`+'.png';
+    //const FilePNG = 'http://103.31.39.135:3000/png/nota'+`${NoNota}`+'.png';
+    const FilePNG = 'http://localhost:3000/png/nota'+`${NoNota}`+'.png';
 
     // Generate PDF Nota Transaksi
     const browser = await puppeteer.launch();

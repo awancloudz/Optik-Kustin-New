@@ -122,14 +122,14 @@ export async function POST(request){
     .then(png => {
         png.readUInt32BE(16);// PNG image width
         png.readUInt32BE(20);// PNG image height
-        const pngPath = path.join(process.cwd(), 'public/png/', 'nota_'+`${NoNota}`+'.png');
+        const pngPath = path.join(process.cwd(), 'public/png/', 'nota'+`${NoNota}`+'.png');
         fs.writeFileSync(pngPath, png);
     })
     .catch(err => {
         // `err` may be a string or Error object
     });
-    //const FilePNG = 'http://103.31.39.135:3000/png/nota_'+`${NoNota}`+'.png';
-    const FilePNG = 'http://localhost:3000/png/nota_'+`${NoNota}`+'.png';
+    //const FilePNG = 'http://103.31.39.135:3000/png/nota'+`${NoNota}`+'.png';
+    const FilePNG = 'http://localhost:3000/png/nota'+`${NoNota}`+'.png';
 
     // Generate PDF Nota Transaksi
     const browser = await puppeteer.launch();
