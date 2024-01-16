@@ -339,6 +339,7 @@ export async function POST(request){
     printer.println(`Undip Tembalang - Kota Semarang`);
     printer.println(`Telp. 024-76402637 - WA 0813 7757 2015`);
     printer.drawLine();
+    printer.setTextNormal();
     printer.tableCustom([                                      
         { text:"No", align:"LEFT", width:0.3 },
         { text:": "+`${NoNota}`, align:"LEFT", width:0.7 }
@@ -377,7 +378,102 @@ export async function POST(request){
         { text:": "+`${JenisKelamin}`, align:"LEFT", width:0.7 }
     ]);
     printer.drawLine();
-    printer.cut();
+    printer.tableCustom([          
+        { text:" ", align:"CENTER"},                            
+        { text:"SPH", align:"CENTER"},
+        { text:"CYL", align:"CENTER"},
+        { text:"AXIS", align:"CENTER"},
+        { text:"ADD", align:"CENTER"},
+        { text:"PD", align:"CENTER"},
+        { text:"Vis Akhir", align:"CENTER", width:0.25},
+    ]);
+    printer.drawLine();
+    printer.tableCustom([                                      
+        { text:"R", align:"CENTER"},
+        { text:`${Data["SPH RIGHT"]}`, align:"CENTER"},
+        { text:`${Data["CYL RIGHT"]}`, align:"CENTER"},
+        { text:`${Data["AXIS RIGHT"]}`, align:"CENTER"},
+        { text:`${Data["ADD"]}`, align:"CENTER"},
+        { text:`${Data["PD"]}`, align:"CENTER"},
+        { text: "6/6", align:"CENTER", width:0.25},
+    ]);
+    printer.tableCustom([                                      
+        { text:"L", align:"CENTER"},
+        { text:`${Data["SPH LEFT"]}`, align:"CENTER"},
+        { text:`${Data["CYL LEFT"]}`, align:"CENTER"},
+        { text:`${Data["AXIS LEFT"]}`, align:"CENTER"},
+        { text: " ", align:"CENTER"},
+        { text: " ", align:"CENTER"},
+        { text: " 6/6", align:"CENTER", width:0.25},
+    ]);
+    printer.drawLine();
+    printer.tableCustom([                                      
+        { text:"Jenis Frame", align:"LEFT", width:0.25 },
+        { text:": "+`${Data["JENIS FRAME"]}`, align:"LEFT", width:0.25 },
+        { text:" Wrap Angle", align:"LEFT", width:0.25 },
+        { text:": "+`${Data["WRAP ANGLE"]}`, align:"LEFT", width:0.25 }
+    ]);
+    printer.tableCustom([                                      
+        { text:"Koridor", align:"LEFT", width:0.25 },
+        { text:": "+`${Data["CORRIDOR"]}`, align:"LEFT", width:0.25 },
+        { text:" PantoscopiK", align:"LEFT", width:0.25 },
+        { text:": "+`${Data["PANTOSCOPIK"]}`, align:"LEFT", width:0.25 }
+    ]);
+    printer.tableCustom([                                      
+        { text:"Vis.Balancing", align:"LEFT", width:0.25 },
+        { text:": "+`${Data["VISUS BALANCING"]}`, align:"LEFT", width:0.25 },
+        { text:" Vertex Dist", align:"LEFT", width:0.25 },
+        { text:": "+`${Data["VERTEX DISTANCE"]}`, align:"LEFT", width:0.25 }
+    ]);
+    printer.tableCustom([                                      
+        { text:"Duke Elder", align:"LEFT", width:0.25 },
+        { text:": "+`${Data["DUKE ELDER"]}`, align:"LEFT", width:0.25 },
+        { text:" Cat. Resep", align:"LEFT", width:0.25 },
+        { text:": "+`${Data["CATATAN RESEP"]}`, align:"LEFT", width:0.25 }
+    ]);
+    printer.drawLine();
+    printer.println(); 
+    printer.println('PRECAL :'); 
+    printer.drawLine();
+    printer.tableCustom([          
+        { text:"A", align:"CENTER"},                            
+        { text:"B", align:"CENTER"},
+        { text:"DBL", align:"CENTER"},
+        { text:"MPD", align:"CENTER"},
+        { text:"SH/PV", align:"CENTER"}
+    ]);
+    printer.drawLine();
+    printer.tableCustom([          
+        { text:`${Data["A"]}`, align:"CENTER"},                            
+        { text:`${Data["B"]}`, align:"CENTER"},
+        { text:`${Data["DBL"]}`, align:"CENTER"},
+        { text:`${Data["MPD"]}`, align:"CENTER"},
+        { text:`${Data["SH/PV"]}`, align:"CENTER"}
+    ]);
+    printer.println(); 
+    printer.tableCustom([                                      
+        { text:"Frame", align:"LEFT", width:0.3 },
+        { text:": "+`${Data.FRAME}`, align:"LEFT", width:0.7 }
+    ]);
+    printer.tableCustom([                                      
+        { text:"Lensa", align:"LEFT", width:0.3 },
+        { text:": "+`${Data.LENSA}`, align:"LEFT", width:0.7 }
+    ]);
+    printer.tableCustom([                                      
+        { text:"Total", align:"LEFT", width:0.3 },
+        { text:": "+`${Data.TOTAL}`, align:"LEFT", width:0.7 }
+    ]);
+    printer.tableCustom([                                      
+        { text:"Uang Muka", align:"LEFT", width:0.3 },
+        { text:": "+`${Data.UANGMUKA}`, align:"LEFT", width:0.7 }
+    ]);
+    printer.tableCustom([                                      
+        { text:"Sisa", align:"LEFT", width:0.3 },
+        { text:": "+`${Data.LENSA}`, align:"LEFT", width:0.7 }
+    ]);
+    printer.println(); 
+    printer.println(`${Cabang}`); 
+    //printer.cut();
 
     try {
         printer.execute()
