@@ -13,6 +13,7 @@
     "html-pdf": "^3.0.1",
     "mongoose": "^8.0.3",
     "next": "14.0.4",
+    "node-thermal-printer": "^4.4.1",
     "puppeteer": "^21.6.1",
     "react": "^18",
     "react-dom": "^18"
