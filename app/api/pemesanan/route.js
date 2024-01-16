@@ -472,7 +472,33 @@ export async function POST(request){
         { text:": "+`${Data.LENSA}`, align:"LEFT", width:0.7 }
     ]);
     printer.println(); 
+    printer.bold(true); 
     printer.println(`${Cabang}`); 
+    printer.println(); 
+    printer.tableCustom([                                      
+        { text:"Edger", align:"CENTER", width:0.5 },
+        { text:"Quality Control", align:"CENTER", width:0.5 }
+    ]);
+    printer.println();
+    printer.println();
+    printer.println();
+    printer.tableCustom([  
+        { text:"(...............)", align:"CENTER", width:0.5 },
+        { text:"(...............)", align:"CENTER", width:0.5 },
+    ]);
+    printer.println();
+    printer.println();
+    printer.tableCustom([                                      
+        { text:"Yang Menyerahkan", align:"CENTER", width:0.5 },
+        { text:"Penerima", align:"CENTER", width:0.5 }
+    ]);
+    printer.println();
+    printer.println();
+    printer.println();
+    printer.tableCustom([  
+        { text:"(...............)", align:"CENTER", width:0.5 },
+        { text:"(...............)", align:"CENTER", width:0.5 },
+    ]);
     //printer.cut();
 
     try {
