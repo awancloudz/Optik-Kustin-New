@@ -28,7 +28,7 @@ export async function POST(request){
     if(Cabang == 'TEMBALANG'){
         var AlamatCabang = "Jl. Sirojudin Raya No.37<br>Undip Tembalang - Kota Semarang<br>Telp. 024-76402637 - WA 0813 7757 2015";
         var TelpCabang = "0813 7757 2015";
-        var serverLokal = "https://1edb-2001-448a-4009-3b5c-8c02-4ce0-2fe7-1c5d.ngrok-free.app/api/pemesananlokal";
+        var serverLokal = "https://honestly-certain-dingo.ngrok-free.app/api/pemesananlokal";
     }
     if(Cabang == 'UNGARAN'){
         var AlamatCabang = "Jl. Ahmad Yani No. 1B, Ungaran<br>Kab. Semarang<br>Telp. 024-76902181 - WA 0813 7757 2016";
