@@ -206,6 +206,8 @@ export async function POST(request){
     const pdfBuffer = await page.pdf({ 
         format: 'A5', 
         margin: { top: 10, bottom: 0, right: 5, left: 5 },
+        height: '3276mm',
+        width:'80mm',
         printBackground: true 
     });
     await browser.close();

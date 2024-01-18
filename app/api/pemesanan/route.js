@@ -8,7 +8,6 @@ import path from 'path';
 import mongoose from "mongoose";
 import bwipjs from "bwip-js";
 import Image from "next/image";
-import { ThermalPrinter, PrinterTypes, CharacterSet, BreakLine } from "node-thermal-printer";
 
 export async function GET(){
     await connectMongoDB();
@@ -98,7 +97,7 @@ export async function POST(request){
         });      
         return formatter.format(number);
     }
-    
+
     //Deteksi Produk
     if(Data["SKU FRAME"] != ""){
         var produk1 = `<tr><td>${Data.FRAME}</td><td align='right'>${Data["HARGA FRAME"]}</td><td align='center'>${Data["DISKON FRAME"]}</td><td align='right'>${numberToRupiah(Jumlah1)}</td></tr>`;
@@ -146,7 +145,7 @@ export async function POST(request){
     <p align='center'><b>OPTIK KUSTIN</b><br>${AlamatCabang}</p>
     <hr style='border-top: 1px dotted black;'> 
     <table width='100%'>
-    <tr><td width='25%'><b>No</b></td><td colspan='2'>: ${NoNota}</td><tr>
+    <tr><td width='30%'><b>No</b></td><td colspan='2'>: ${NoNota}</td><tr>
     <tr><td><b>Rx</b></td><td colspan='2'>: ${RX}</td><tr>
     <tr><td><b>Tgl. Pembelian</b></td><td colspan='2'>: ${TanggalPesan}</td><tr>
     <tr><td><b>Tgl. Selesai</b></td><td colspan='2'>: ${TanggalSelesai}</td><tr>
@@ -183,8 +182,10 @@ export async function POST(request){
     </body></html>`;   
     await page.setContent(htmlContent);
     const pdfBuffer = await page.pdf({ 
-        format: 'A5', 
-        margin: { top: 10, bottom: 0, right: 5, left: 5 },
+        //format: 'A5', 
+        margin: { top: 10, bottom: 0, right: 10, left: 7 },
+        height: '3276mm',
+        width:'80mm',
         printBackground: true
     });
     await browser.close();
@@ -228,24 +229,24 @@ export async function POST(request){
     `<html>
     <head>
     </head>
-    <body style='font-family: Arial, Helvetica, sans-serif;'> 
+    <body style='font-family: "Arial Narrow";font-size:19px;'> 
     <p align='center'>${FilePNG}</p>
     <p align='center'><b>OPTIK KUSTIN</b><br>${AlamatCabang}</p>
     <hr style='border-top: 1px dotted black;'> 
-    <table width='100%'>
-    <tr><td width='25%'><b>No</b></td><td colspan='2'>: ${NoNota}</td><tr>
-    <tr><td><b>Rx</b></td><td colspan='2'>: ${RX}</td><tr>
-    <tr><td><b>Tgl. Pembelian</b></td><td colspan='2'>: ${TanggalPesan}</td><tr>
-    <tr><td><b>Tgl. Selesai</b></td><td colspan='2'>: ${TanggalSelesai}</td><tr>
+    <table width='100%' style='font-family: "Arial Narrow";font-size:19px;'>
+    <tr><td width='30%'>No</td><td colspan='2'>: ${NoNota}</td><tr>
+    <tr><td>Rx</td><td colspan='2'>: ${RX}</td><tr>
+    <tr><td>Tgl. Pembelian</td><td colspan='2'>: ${TanggalPesan}</td><tr>
+    <tr><td>Tgl. Selesai</td><td colspan='2'>: ${TanggalSelesai}</td><tr>
     <tr><td colspan='3'><hr style='border-top: 1px dotted black;'></td></tr>
     ${customer}
-    <tr><td><b>Nama</b></td><td colspan='2'>: ${NamaCustomer}</td><tr>
-    <tr><td style='vertical-align: top;'><b>Alamat</b></td><td align='left' style='vertical-align: top;'>: </td><td style='word-wrap: break-word;width: 500px;'>${Alamat}</td><tr>
-    <tr><td><b>Telp</b></td><td colspan='2'>: ${NoHandphone}</td><tr>
-    <tr><td><b>Umur</b></td><td colspan='2'>: ${Umur}</td><tr>
-    <tr><td><b>Jenis Kelamin</b></td><td colspan='2'>: ${JenisKelamin}</td><tr>
+    <tr><td>Nama</td><td colspan='2'>: ${NamaCustomer}</td><tr>
+    <tr><td style='vertical-align: top;'>Alamat</td><td align='left' style='vertical-align: top;'>: </td><td style='word-wrap: break-word;width: 500px;'>${Alamat}</td><tr>
+    <tr><td>Telp</td><td colspan='2'>: ${NoHandphone}</td><tr>
+    <tr><td>Umur</td><td colspan='2'>: ${Umur}</td><tr>
+    <tr><td>Jenis Kelamin</td><td colspan='2'>: ${JenisKelamin}</td><tr>
     </table>
-    <table width='100%' align='center'>
+    <table width='100%' align='center' style='font-family: "Arial Narrow";font-size:19px;'>
     <tr><td colspan='7'><hr style='border-top: 1px solid black;border-bottom: 1px solid black;height:1px;'></td></tr>
     <tr><th></th><th>SPH</th><th>CYL</th><th>AXIS</th><th>ADD</th><th>PD</th><th>Vis Akhir</th></tr>
     <tr><td colspan='7'><hr style='border-top: 1px solid black;border-bottom: 1px solid black;height:1px;'></td></tr>
@@ -253,21 +254,21 @@ export async function POST(request){
     <tr align='center'><td>L</td><td>${Data["SPH RIGHT"]}</td><td>${Data["CYL RIGHT"]}</td><td>${Data["AXIS RIGHT"]}</td><td>6/6</td></tr>
     <tr><td colspan='7'><hr style='border-top: 1px dotted black;'></td></tr>
     </table>
-    <table width='100%'>
+    <table width='100%' style='font-family: "Arial Narrow";font-size:19px;'>
     <tr><td width='25%'>Jenis Frame</td><td>: ${Data["JENIS FRAME"]}</td><td>Wrap Angle</td><td>: ${Data["WRAP ANGLE"]}</td><tr>
     <tr><td>Koridor</td><td>: ${Data.CORRIDOR}</td><td>Pantoskopik</td><td>: ${Data.PANTOSCOPIK}</td><tr>
-    <tr><td>Visus Balancing</td><td>: ${Data["VISUS BALANCING"]}</td><td>Vertex Distance</td><td>: ${Data["VERTEX DISTANCE"]}</td><tr>
+    <tr><td>Visus Balance</td><td>: ${Data["VISUS BALANCING"]}</td><td>Vertex Distance</td><td>: ${Data["VERTEX DISTANCE"]}</td><tr>
     <tr><td>Duke Elder</td><td>: ${Data["DUKE ELDER"]}</td><td>Catatan Resep</td><td>: ${Data["CATATAN RESEP"]}</td><tr>
     <tr><td colspan='4'><hr style='border-top: 1px dotted black;'></td></tr>
     </table>    
-    <table width='100%' align='center'>
-    <tr><td colspan='5'><br><br><br><br><p><b>PRECAL:</b></p></td></tr>
+    <table width='100%' align='center' style='font-family: "Arial Narrow";font-size:19px;'>
+    <tr><td colspan='5'><p><b>PRECAL:</b></p></td></tr>
     <tr><td colspan='5'><hr style='border-top: 1px solid black;border-bottom: 1px solid black;height:1px;'></td></tr>
     <tr><th>A</th><th>B</th><th>DBL</th><th>MPD</th><th>SH/PV</th></tr>
     <tr><td colspan='5'><hr style='border-top: 1px solid black;border-bottom: 1px solid black;height:1px;'></td></tr>
     <tr align='center'><td>${Data.A}</td><td>${Data.B}</td><td>${Data.DBL}</td><td>${Data.MPD}</td><td>${Data["SH/PV"]}</td></tr>
     </table><br>
-    <table width='100%' align='center'>
+    <table width='100%' align='center' style='font-family: "Arial Narrow";font-size:19px;'>
     <tr><td width='25%'><b>Frame</b></td><td colspan='2'>: ${Data.FRAME}</td><tr>
     <tr><td><b>Lensa</b></td><td colspan='2'>: ${Data.LENSA}</td><tr>
     <tr><td><b>Total</b></td><td colspan='2'>: ${Data.TOTAL}</td><tr>
@@ -275,7 +276,7 @@ export async function POST(request){
     <tr><td><b>Sisa</b></td><td colspan='2'>: ${Data.SISA}</td><tr>
     </table>
     <h2 align='center'>${Cabang}</h2>
-    <table width='100%' style='border-collapse: collapse;border: 1px solid black;'>
+    <table width='100%' style='border-collapse: collapse;border: 1px solid black;font-family: "Arial Narrow";font-size:19px;'>
     <tr><td width='50%' align='center'><br>Edger</td><td width='50%' align='center'><br>Quality Control</td></tr>
     <tr><td align='center'><br><br><br></td><td align='center'><br><br><br></td></tr>
     <tr><td align='center'>(...............)</td><td align='center'>(...............)</td></tr>
@@ -287,12 +288,14 @@ export async function POST(request){
     </body></html>`;   
     await page3.setContent(htmlContent3);
     const pdfBuffer3 = await page3.pdf({ 
-        format: 'A5', 
-        margin: { top: 10, bottom: 0, right: 5, left: 5 },
+        //format: 'A5', 
+        margin: { top: 10, bottom: 0, right: 38, left: 0 },
+        height: '3276mm',
+        width:'80mm',
         printBackground: true
     });
     await browser3.close();
-
+    
     // Save the PDF to a file
     const pdfPath = path.join(process.cwd(), 'public/pdf/', 'notapemesanan_'+`${NoNota}`+'.pdf');
     const pdfPath2 = path.join(process.cwd(), 'public/pdf/', 'kartugaransi_'+`${NoNota}`+'.pdf');
