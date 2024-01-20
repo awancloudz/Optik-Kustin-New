@@ -184,7 +184,7 @@ export async function POST(request){
     const pdfBuffer = await page.pdf({ 
         //format: 'A5', 
         margin: { top: 10, bottom: 0, right: 10, left: 7 },
-        height: '3276mm',
+        height: '297mm',
         width:'80mm',
         printBackground: true
     });
@@ -290,7 +290,7 @@ export async function POST(request){
     const pdfBuffer3 = await page3.pdf({ 
         //format: 'A5', 
         margin: { top: 10, bottom: 0, right: 38, left: 0 },
-        height: '3276mm',
+        height: '297mm',
         width:'80mm',
         printBackground: true
     });
@@ -327,7 +327,7 @@ export async function POST(request){
             body: JSON.stringify({Data}),
         });
     }
-    sendToProxy();
+    await sendToProxy();
 
     //Send PDF to Whatsapp
     const sendWA = async() => {
@@ -339,7 +339,7 @@ export async function POST(request){
             body: JSON.stringify({JenisTransaksi, Cabang, NoNota, TanggalPesan, TanggalSelesai, RX, IDCustomer, NamaCustomer, Alamat, NoHandphone, FilePDF, FilePDF2, FilePDF3}),
         });
     }
-    sendWA();
+    await sendWA();
 
     //Response
     return NextResponse.json({message: "Nota PDF Terkirim",Data},{status:201});    

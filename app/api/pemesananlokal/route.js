@@ -41,7 +41,7 @@ export async function POST(request){
     var Umur = tahun + " Tahun " + bulan + " Bulan " + hari + " Hari";
         
     //Printer Ke Printer Lokal
-    const printLokal = () => {        
+    const printLokal = async() => {        
         //const electron = typeof process !== 'undefined' && process.versions && !!process.versions.electron;
 
         let printerSO = new ThermalPrinter({
@@ -49,6 +49,7 @@ export async function POST(request){
             //interface: 'printer: POS80 Printer USB',
             interface: 'tcp://192.168.1.1',
             //driver: driverPrint,
+            //lineCharacter: ".",
         });
         
         var data = `${NoNota}`;         // Barcode data (string or buffer)
@@ -58,6 +59,7 @@ export async function POST(request){
         height: 100,                    // Barcode height (0≤ height ≤255)
         }
         
+        //await printerSO.printImage('./public/png/123456.png');
         printerSO.printBarcode(data, type, settings);
         printerSO.println();   
         printerSO.alignCenter();
@@ -169,7 +171,7 @@ export async function POST(request){
             { text:"B", align:"CENTER"},
             { text:"DBL", align:"CENTER"},
             { text:"MPD", align:"CENTER"},
-            { text:"SH/PV", align:"CENTER", width:0.2}
+            { text:"SH/PV", align:"CENTER", width:0.4}
         ]);
         printerSO.drawLine();
         printerSO.tableCustom([          
@@ -177,7 +179,7 @@ export async function POST(request){
             { text:`${Data["B"]}`, align:"CENTER"},
             { text:`${Data["DBL"]}`, align:"CENTER"},
             { text:`${Data["MPD"]}`, align:"CENTER"},
-            { text:`${Data["SH/PV"]}`, align:"CENTER", width:0.2}
+            { text:`${Data["SH/PV"]}`, align:"CENTER", width:0.4}
         ]);
         printerSO.println(); 
         printerSO.tableCustom([                                      
@@ -240,7 +242,7 @@ export async function POST(request){
             console.error("Print failed:", error);
         }
     }
-    printLokal();
+    await printLokal();
 
     //Response
     return NextResponse.json({message: "Nota Terkirim",Data},{status:201});    

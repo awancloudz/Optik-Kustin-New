@@ -7,6 +7,7 @@ import path from 'path';
 // import htmlToPdf from 'html-pdf';
 import mongoose from "mongoose";
 import bwipjs from "bwip-js";
+import Image from "next/image";
 
 export async function GET(){
     await connectMongoDB();
@@ -152,8 +153,8 @@ export async function POST(request){
     .catch(err => {
         // `err` may be a string or Error object
     });
-    //const FilePNG = 'http://103.31.39.135:3000/png/nota'+`${NoNota}`+'.png';
-    const FilePNG = 'http://localhost:3000/png/nota'+`${NoNota}`+'.png';
+    //const FilePNG = '<Image src="http://103.31.39.135:3000/png/nota_'+`${NoNota}`+'.png" />';
+    const FilePNG = '<Image src="http://localhost:3000/png/nota_'+`${NoNota}`+'.png" />';
 
     // Generate PDF Nota Transaksi
     const browser = await puppeteer.launch();
@@ -170,7 +171,7 @@ export async function POST(request){
     <head>
     </head>
     <body style='font-family: Arial, Helvetica, sans-serif;'> 
-    <p align='center'><img src='${FilePNG}'/></p>
+    <p align='center'>${FilePNG}</p>
     <p align='center'><b>OPTIK KUSTIN</b><br>${AlamatCabang}</p>
     <hr style='border-top: 1px dotted black;'> 
     <table width='100%'>
@@ -204,9 +205,9 @@ export async function POST(request){
     </body></html>`;   
     await page.setContent(htmlContent);
     const pdfBuffer = await page.pdf({ 
-        format: 'A5', 
-        margin: { top: 10, bottom: 0, right: 5, left: 5 },
-        height: '3276mm',
+        //format: 'A5', 
+        margin: { top: 10, bottom: 0, right: 10, left: 7 },
+        height: '297mm',
         width:'80mm',
         printBackground: true 
     });
@@ -225,13 +226,16 @@ export async function POST(request){
     mongoose.connection.close()
 
     //Send PDF to Whatsapp
-    await fetch("http://localhost:8000/transaction",{
-        method: "POST",
-        headers: {
-            "Content-type": "application/json",
-        },
-        body: JSON.stringify({JenisTransaksi, Cabang, NoNota, Tanggal, RX, IDCustomer, NamaCustomer, Alamat, NoHandphone, FilePDF}),
-    });
+    const sendWA = async() => {
+        await fetch("http://localhost:8000/transaction",{
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify({JenisTransaksi, Cabang, NoNota, Tanggal, RX, IDCustomer, NamaCustomer, Alamat, NoHandphone, FilePDF}),
+        });
+    }
+    await sendWA();
 
     //Response
     return NextResponse.json({message: "Nota Terkirim",Data},{status:201});    
