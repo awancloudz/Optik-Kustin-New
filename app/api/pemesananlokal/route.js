@@ -50,6 +50,7 @@ export async function POST(request){
             interface: 'tcp://192.168.1.1',
             //driver: driverPrint,
             //lineCharacter: ".",
+            characterSet: CharacterSet.PC852_LATIN2,
         });
         
         var data = `${NoNota}`;         // Barcode data (string or buffer)
@@ -125,7 +126,7 @@ export async function POST(request){
             { text:`${Data["AXIS RIGHT"]}`, align:"CENTER"},
             { text:`${Data["ADD"]}`, align:"CENTER"},
             { text:`${Data["PD"]}`, align:"CENTER"},
-            { text: "6/6", align:"CENTER", width:0.2},
+            { text: "6/6", align:"CENTER"},
         ]);
         printerSO.tableCustom([                                      
             { text:"L", align:"CENTER"},
@@ -134,7 +135,7 @@ export async function POST(request){
             { text:`${Data["AXIS LEFT"]}`, align:"CENTER"},
             { text: " ", align:"CENTER"},
             { text: " ", align:"CENTER"},
-            { text: "6/6", align:"CENTER", width:0.2},
+            { text: "6/6", align:"CENTER"},
         ]);
         printerSO.drawLine();
         printerSO.tableCustom([                                      
@@ -171,7 +172,7 @@ export async function POST(request){
             { text:"B", align:"CENTER"},
             { text:"DBL", align:"CENTER"},
             { text:"MPD", align:"CENTER"},
-            { text:"SH/PV", align:"CENTER", width:0.4}
+            { text:"SH/PV", align:"LEFT"}
         ]);
         printerSO.drawLine();
         printerSO.tableCustom([          
@@ -179,7 +180,7 @@ export async function POST(request){
             { text:`${Data["B"]}`, align:"CENTER"},
             { text:`${Data["DBL"]}`, align:"CENTER"},
             { text:`${Data["MPD"]}`, align:"CENTER"},
-            { text:`${Data["SH/PV"]}`, align:"CENTER", width:0.4}
+            { text:`${Data["SH/PV"]}`, align:"LEFT"}
         ]);
         printerSO.println(); 
         printerSO.tableCustom([                                      

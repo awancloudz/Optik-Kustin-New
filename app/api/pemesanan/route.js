@@ -27,7 +27,8 @@ export async function POST(request){
     if(Cabang == 'TEMBALANG'){
         var AlamatCabang = "Jl. Sirojudin Raya No.37<br>Undip Tembalang - Kota Semarang<br>Telp. 024-76402637 - WA 0813 7757 2015";
         var TelpCabang = "0813 7757 2015";
-        var serverLokal = "https://honestly-certain-dingo.ngrok-free.app/api/pemesananlokal";
+        //var serverLokal = "https://honestly-certain-dingo.ngrok-free.app/api/pemesananlokal";
+        var serverLokal = "https://honestly-certain-dingo.ngrok-free.app/api/print/suratorder";
     }
     if(Cabang == 'UNGARAN'){
         var AlamatCabang = "Jl. Ahmad Yani No. 1B, Ungaran<br>Kab. Semarang<br>Telp. 024-76902181 - WA 0813 7757 2016";
@@ -312,6 +313,8 @@ export async function POST(request){
     Data.FilePDF3 = FilePDF3;
     console.log("Generate PDF Sukses!");
 
+    Data.Umur = Umur;
+    
     //Save Data to MongoDB
     await connectMongoDB();
     await Pemesanan.create([{JenisTransaksi, Cabang, NoNota, TanggalPesan, TanggalSelesai, RX, IDCustomer, NamaCustomer, Alamat, NoHandphone, FilePDF, FilePDF2, FilePDF3}]);
