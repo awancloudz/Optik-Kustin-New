@@ -1,0 +1,18 @@
+{
+    "UpdateMode": "Add",
+    "Application": "STORE TEMBALANG",
+    "TableName": "DATA BARANG JUAL LANGSUNG",
+    "At": "24/01/2024 15.53.22",
+    "Data": {
+      "NOTA": "8",
+      "SKU": "52908",
+      "NAMA BARANG": "",
+      "WARNA": "",
+      "UKURAN": "",
+      "HARGA JUAL": "Rp0",
+      "DISKON": "0%",
+      "QTY": "1",
+      "SUBTOTAL": "Rp0",
+      "TOTAL DISKON": "Rp0"
+    }
+  }

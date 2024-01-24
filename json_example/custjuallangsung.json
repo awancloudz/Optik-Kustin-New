@@ -1,0 +1,27 @@
+{
+    "UpdateMode": "Add",
+    "Application": "STORE TEMBALANG",
+    "TableName": "INPUT CUST JUAL LANGSUNG",
+    "At": "24/01/2024 15.53.19",
+    "Data": {
+      "STORE": "TEMBALANG",
+      "NOTA": "8",
+      "TANGGAL": "24/01/2024 00.00.00",
+      "RX": "VINA",
+      "STATUS CUSTOMER": "NON MEMBER",
+      "ID MEMBER": "",
+      "NAMA CUSTOMER": "AWAN TEST",
+      "ALAMAT": "JALAN TEST",
+      "NO. TELP": "081279349292",
+      "TANGGAL LAHIR": "01/01/1990",
+      "JENIS KELAMIN": "LAKI-LAKI",
+      "SUBTOTAL": "Rp0",
+      "DISKON": "Rp0",
+      "DISKON TAMBAHAN": "Rp0",
+      "TOTAL": "Rp0",
+      "PEMBAYARAN": "Rp0",
+      "JENIS PEMBAYARAN": "TUNAI",
+      "JENIS EDC": "",
+      "KETERANGAN": "test"
+    }
+  }
