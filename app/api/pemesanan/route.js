@@ -8,6 +8,7 @@ import path from 'path';
 import mongoose from "mongoose";
 import bwipjs from "bwip-js";
 import Image from "next/image";
+import Customer from "@/models/customer";
 
 export async function GET(){
     await connectMongoDB();
@@ -28,7 +29,6 @@ export async function POST(request){
         var AlamatCabang = "Jl. Sirojudin Raya No.37<br>Undip Tembalang - Kota Semarang<br>Telp. 024-76402637 - WA 0813 7757 2015";
         var TelpCabang = "0813 7757 2015";
         //var serverLokal = "https://honestly-certain-dingo.ngrok-free.app/api/pemesananlokal";
-        var serverLokal = "https://honestly-certain-dingo.ngrok-free.app/api/print/suratorder";
     }
     if(Cabang == 'UNGARAN'){
         var AlamatCabang = "Jl. Ahmad Yani No. 1B, Ungaran<br>Kab. Semarang<br>Telp. 024-76902181 - WA 0813 7757 2016";
@@ -74,7 +74,8 @@ export async function POST(request){
     var bulan = Math.floor((selisih % (365.25 * 24 * 60 * 60 * 1000)) / (30.44 * 24 * 60 * 60 * 1000));
     var hari = Math.floor((selisih % (30.44 * 24 * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000));
     var Umur = tahun + " Tahun " + bulan + " Bulan " + hari + " Hari";
-    
+    Data.Umur = Umur;
+
     //Fungsi Convert Rupiah to Number
     const rupiahToNumber = (rupiahString) => {
         // Hapus karakter non-numeric dari string
@@ -99,15 +100,35 @@ export async function POST(request){
         return formatter.format(number);
     }
 
-    //Deteksi Produk
-    if(Data["SKU FRAME"] != ""){
-        var produk1 = `<tr><td>${Data.FRAME}</td><td align='right'>${Data["HARGA FRAME"]}</td><td align='center'>${Data["DISKON FRAME"]}</td><td align='right'>${numberToRupiah(Jumlah1)}</td></tr>`;
+    //Data Pesanan
+    const SKUFrame = Data["SKU FRAME"];
+    const Frame = Data.FRAME;
+    const HargaFrame = Data["HARGA FRAME"];
+    const DiskonFrame = Data["DISKON FRAME"];
+    const JumlahFrame = numberToRupiah(Jumlah1);
+
+    const SKULensa = Data["SKU LENSA"];
+    const Lensa = Data.LENSA;
+    const HargaLensa = Data["HARGA LENSA"];
+    const DiskonLensa = Data["DISKON LENSA"];
+    const JumlahLensa = numberToRupiah(Jumlah2);
+
+    const SubTotal = Data.SUBTOTAL;
+    const Diskon = Data.DISKON;
+    const DiskonTambahan = Data["DISKON TAMBAHAN"];
+    const Total = Data.TOTAL;
+    const UangMuka = Data.UANGMUKA;
+    const JenisPembayaran = Data["JENIS PEMBAYARAN"];
+    const Sisa = Data.SISA;
+
+    if(SKUFrame != ""){
+        var produk1 = `<tr><td>${Frame}</td><td align='right'>${HargaFrame}</td><td align='center'>${DiskonFrame}</td><td align='right'>${JumlahFrame}</td></tr>`;
     }
     else{
         var produk1 = ``;
     }
-    if(Data["SKU LENSA"] != ""){
-        var produk2 = `<tr><td>${Data.LENSA}</td><td align='right'>${Data["HARGA LENSA"]}</td><td align='center'>${Data["DISKON LENSA"]}</td><td align='right'>${numberToRupiah(Jumlah2)}</td></tr>`;
+    if(SKULensa != ""){
+        var produk2 = `<tr><td>${Lensa}</td><td align='right'>${HargaLensa}</td><td align='center'>${DiskonLensa}</td><td align='right'>${JumlahLensa}</td></tr>`;
     }
     else{
         var produk2 = ``;
@@ -165,15 +186,15 @@ export async function POST(request){
     ${produk1}
     ${produk2}
     <tr><td colspan='4'><hr style='border-top: 1px dotted black;'></td></tr>
-    <tr><td></td><td colspan='2'>SUB TOTAL</td><td align='right'>${Data.SUBTOTAL}</td></tr>
-    <tr><td></td><td colspan='2'>DISKON</td><td align='right'>${Data.DISKON}</td></tr>
-    <tr><td></td><td colspan='2'>BIAYA TAMBAHAN</td><td align='right'>${Data["DISKON TAMBAHAN"]}</td></tr>
+    <tr><td></td><td colspan='2'>SUB TOTAL</td><td align='right'>${SubTotal}</td></tr>
+    <tr><td></td><td colspan='2'>DISKON</td><td align='right'>${Diskon}</td></tr>
+    <tr><td></td><td colspan='2'>DISKON TAMBAHAN</td><td align='right'>${DiskonTambahan}</td></tr>
     <tr><td></td><td colspan='3'><hr style='border-top: 1px dotted black;'></td></tr>
-    <tr><td></td><td colspan='2'>TOTAL</td><td align='right'>${Data.TOTAL}<br></td></tr>
-    <tr><td></td><td colspan='2'>UANG MUKA</td><td align='right'>${Data.UANGMUKA}<br></td></tr>
-    <tr><td></td><td colspan='2'>PEMBAYARAN</td><td align='right'>${Data["JENIS PEMBAYARAN"]}</td></tr>
-    <tr><td></td><td colspan='2'>SISA</td><td align='right'>${Data.SISA}</td></tr>
-    <tr><td></td><td colspan='2'>Anda Hemat</td><td align='right'>${Data.DISKON}</td></tr>
+    <tr><td></td><td colspan='2'>TOTAL</td><td align='right'>${Total}<br></td></tr>
+    <tr><td></td><td colspan='2'>UANG MUKA</td><td align='right'>${UangMuka}<br></td></tr>
+    <tr><td></td><td colspan='2'>PEMBAYARAN</td><td align='right'>${JenisPembayaran}</td></tr>
+    <tr><td></td><td colspan='2'>SISA</td><td align='right'>${Sisa}</td></tr>
+    <tr><td></td><td colspan='2'>Anda Hemat</td><td align='right'>${Diskon}</td></tr>
     </table><hr style='border-top: 1px solid black;border-bottom: 1px solid black;height:1px;'>
     <p align='center'><b>TERIMA KASIH</b></p>
     <p>* Barang yang sudah dibeli tidak dapat ditukar/dikembalikan, uang muka tidak dapat di kembalikan.<br>
@@ -192,7 +213,7 @@ export async function POST(request){
     await browser.close();
 
     // Generate PDF Kartu Garansi
-    const browser2 = await puppeteer.launch();
+    /*const browser2 = await puppeteer.launch();
     const page2 = await browser2.newPage();
     const htmlContent2 = 
     `<html style='background: white;'>
@@ -221,10 +242,10 @@ export async function POST(request){
         margin: { top: 10, bottom: 0, right: 10, left: 10 },
         printBackground: true 
     });
-    await browser2.close();
+    await browser2.close();*/
 
     // Generate PDF Nota Transaksi
-    const browser3 = await puppeteer.launch();
+    /*const browser3 = await puppeteer.launch();
     const page3 = await browser3.newPage();
     const htmlContent3 = 
     `<html>
@@ -295,42 +316,34 @@ export async function POST(request){
         width:'80mm',
         printBackground: true
     });
-    await browser3.close();
+    await browser3.close();*/
     
     // Save the PDF to a file
     const pdfPath = path.join(process.cwd(), 'public/pdf/', 'notapemesanan_'+`${NoNota}`+'.pdf');
-    const pdfPath2 = path.join(process.cwd(), 'public/pdf/', 'kartugaransi_'+`${NoNota}`+'.pdf');
-    const pdfPath3 = path.join(process.cwd(), 'public/pdf/', 'suratorder_'+`${NoNota}`+'.pdf');
-
     fs.writeFileSync(pdfPath, pdfBuffer);
-    fs.writeFileSync(pdfPath2, pdfBuffer2);
-    fs.writeFileSync(pdfPath3, pdfBuffer3);
     var FilePDF = 'notapemesanan_'+`${NoNota}`+'.pdf';
     Data.FilePDF = FilePDF;
+    console.log("Generate PDF Sukses!");
+
+    /*const pdfPath2 = path.join(process.cwd(), 'public/pdf/', 'kartugaransi_'+`${NoNota}`+'.pdf');
+    const pdfPath3 = path.join(process.cwd(), 'public/pdf/', 'suratorder_'+`${NoNota}`+'.pdf');      
+    fs.writeFileSync(pdfPath2, pdfBuffer2);
+    fs.writeFileSync(pdfPath3, pdfBuffer3);       
     var FilePDF2 = 'kartugaransi_'+`${NoNota}`+'.pdf';
     Data.FilePDF2 = FilePDF2;
     var FilePDF3 = 'suratorder_'+`${NoNota}`+'.pdf';
-    Data.FilePDF3 = FilePDF3;
-    console.log("Generate PDF Sukses!");
-
-    Data.Umur = Umur;
+    Data.FilePDF3 = FilePDF3;*/
+    
     
     //Save Data to MongoDB
     await connectMongoDB();
-    await Pemesanan.create([{JenisTransaksi, Cabang, NoNota, TanggalPesan, TanggalSelesai, RX, IDCustomer, NamaCustomer, Alamat, NoHandphone, FilePDF, FilePDF2, FilePDF3}]);
+    if(Data["STATUS CUSTOMER"] == "NON MEMBER"){
+        await Customer.create([{IDCustomer, NamaCustomer, Alamat, NoHandphone, Umur, JenisKelamin}]);
+        console.log("Data Customer Baru Tersimpan!");
+    }    
+    await Pemesanan.create([{JenisTransaksi, Cabang, NoNota, TanggalPesan, TanggalSelesai, RX, IDCustomer, NamaCustomer, Alamat, NoHandphone, Umur, JenisKelamin, SKUFrame, Frame, HargaFrame, DiskonFrame, JumlahFrame, SKULensa, Lensa, HargaLensa, DiskonLensa, JumlahLensa, SubTotal, Diskon, DiskonTambahan, Total, UangMuka, JenisPembayaran, Sisa, FilePDF}]);
     mongoose.connection.close()
-
-    //Kirim Data Ke Proxy Lokal
-    const sendToProxy = async() => {
-        await fetch(`${serverLokal}`,{
-            method: "POST",
-            headers: {
-                "Content-type": "application/json",
-            },
-            body: JSON.stringify({Data}),
-        });
-    }
-    await sendToProxy();
+    console.log("Data Pemesanan Tersimpan!");
 
     //Send PDF to Whatsapp
     const sendWA = async() => {
@@ -339,7 +352,7 @@ export async function POST(request){
             headers: {
                 "Content-type": "application/json",
             },
-            body: JSON.stringify({JenisTransaksi, Cabang, NoNota, TanggalPesan, TanggalSelesai, RX, IDCustomer, NamaCustomer, Alamat, NoHandphone, FilePDF, FilePDF2, FilePDF3}),
+            body: JSON.stringify({JenisTransaksi, Cabang, NoNota, TanggalPesan, TanggalSelesai, RX, IDCustomer, NamaCustomer, Alamat, NoHandphone, FilePDF}),
         });
     }
     await sendWA();
