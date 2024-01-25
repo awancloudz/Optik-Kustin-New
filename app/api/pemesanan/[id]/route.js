@@ -40,8 +40,6 @@ export async function POST(request){
     const VertexDistance = Data["VERTEX DISTANCE"];
     const CatatanResep = Data["CATATAN RESEP"];
 
-
-
     //Pencarian Data Nota Pemesanan
     await connectMongoDB();
     const DataPesanan = await Pemesanan.findOne({NoNota: NoNota});
@@ -59,7 +57,7 @@ export async function POST(request){
                 headers: {
                     "Content-type": "application/json",
                 },
-                body: JSON.stringify({Data}),
+                body: JSON.stringify({Data, DataPesanan}),
             });
         }
 
@@ -70,10 +68,12 @@ export async function POST(request){
             await sendToProxy();
             console.log("Data Resep Tersimpan & Tercetak!")
         }  
+        return NextResponse.json({Data, DataPesanan}, {status: 200});
     }      
     else{
         console.log("Data Nota TIDAK Ditemukan!")
+        return NextResponse.json({message: "Data Nota TIDAK Ditemukan!"}, {status: 404});
     }
     
-    return NextResponse.json({Data, DataPesanan}, {status: 200});
+    
 }
